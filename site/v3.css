@@ -1,0 +1,16 @@
+/* Mirror World v3 — time-of-day toggle (Tab) */
+.tod-toggle { position: absolute; z-index: 6; right: 12px; top: calc(env(safe-area-inset-top, 0px) + 70px); display: inline-flex; gap: 2px; padding: 3px;
+  background: rgba(7, 15, 24, 0.72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; }
+.tod-toggle button { appearance: none; border: 0; background: transparent; color: #e8f1f5; font: 600 12px/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding: 6px 10px; min-height: 32px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.tod-toggle button:hover { background: rgba(255,255,255,0.08); }
+.tod-toggle button.is-active { background: linear-gradient(135deg, #ffd37a, #ff9f43); color: #1b1206; }
+.tod-toggle button:focus-visible { outline: 2px solid #7ffff0; outline-offset: 1px; }
+.city-credit { position: absolute; z-index: 5; left: 12px; top: calc(env(safe-area-inset-top, 0px) + 74px); font: 600 10.5px/1.3 system-ui, sans-serif; color: rgba(236,255,250,0.82);
+  background: rgba(7,15,24,0.55); padding: 5px 8px; border-radius: 8px; max-width: 46vw; pointer-events: none; transition: opacity .4s; }
+@media (max-width: 380px) { .tod-toggle button { padding: 6px 8px; } }
+
+/* inside the right-hand map tools: a vertical icon stack */
+.map-tools .tod-toggle { position: static; flex-direction: column; width: 46px; padding: 3px; gap: 3px; border-radius: 23px; justify-self: center; }
+.map-tools .tod-toggle button { width: 38px; height: 38px; min-height: 38px; padding: 0; font-size: 17px; display: grid; place-items: center; }
+.map-tools .tod-toggle .tod-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

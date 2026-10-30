@@ -1,0 +1,49 @@
+/* v2 additions (written by Tab) */
+.v2tag { font-style: normal; font: 600 9px var(--mono); color: var(--ink); background: var(--cyan); border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: 2px; }
+.map-canvas { touch-action: none; }
+.chip-row { position: absolute; z-index: 5; top: calc(max(22px, env(safe-area-inset-top)) + 54px); left: 24px; right: 76px; display: flex; gap: 8px; pointer-events: none; }
+.photo-chip { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.photo-chip.is-pred::before { background: #ff5a86; box-shadow: 0 0 8px rgba(255, 90, 134, .8); }
+.tour-caption { position: absolute; z-index: 5; left: 50%; top: 38%; transform: translate(-50%, 8px); opacity: 0; transition: opacity .5s ease, transform .5s ease; pointer-events: none; font-weight: 800; font-size: clamp(22px, 6vw, 40px); letter-spacing: -.04em; text-align: center; text-shadow: 0 2px 24px rgba(0,0,0,.75), 0 0 2px rgba(0,0,0,.9); white-space: nowrap; }
+.tour-caption.visible { opacity: 1; transform: translate(-50%, 0); }
+.tour-caption small { display: block; font: 500 11px var(--mono); letter-spacing: .08em; color: var(--mint); margin-top: 4px; text-transform: uppercase; }
+.map-tools { top: 42%; }
+.compare-label { pointer-events: none; }
+.world.is-comparing .compare-label-left { pointer-events: auto; }
+.map-tool b { font: 700 11px var(--mono); letter-spacing: -.02em; }
+.map-tool.is-on { border-color: rgba(103,245,229,.6); color: var(--cyan); }
+#compassIcon { transition: transform .2s linear; }
+.slider-wrap { position: relative; flex: 1; display: flex; align-items: center; }
+.slider-wrap input { width: 100%; }
+.ticks { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
+.ticks i { position: absolute; top: 9px; width: 1px; height: 6px; background: rgba(183, 255, 232, .55); transform: translateX(-.5px); }
+.ticks i.pred { background: rgba(255, 90, 134, .7); }
+.ticks i span { position: absolute; top: 7px; left: 50%; transform: translateX(-50%); font: 8px var(--mono); color: #7f9799; }
+.gesture-hint { position: absolute; z-index: 6; left: 50%; top: 46%; transform: translateX(-50%); padding: 10px 14px; border-radius: 999px; background: rgba(7,17,22,.82); border: 1px solid rgba(188,230,236,.2); font: 11px var(--mono); color: #d7e5df; width: max-content; max-width: 78vw; text-align: center; line-height: 1.5; pointer-events: none; animation: hintfade 5s ease forwards; }
+@keyframes hintfade { 0%, 75% { opacity: 1; } 100% { opacity: 0; } }
+.why-legend { z-index: 6; }
+.why-legend.is-collapsed h3 { padding: 0 14px 0 12px; gap: 8px; }
+.why-legend.is-collapsed h3::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ff5a86; box-shadow: 0 0 10px #ff5a86; }
+.why-legend h3 { cursor: pointer; }
+.compare-label-left { cursor: pointer; }
+.compare-divider { touch-action: none; }
+.maplibregl-ctrl-attrib { font-size: 9px; }
+.world.is-comparing .chip-row { opacity: 0; }
+@media (max-width: 600px) {
+  .chip-row { left: 14px; right: 14px; }
+  .map-tools { right: 12px; top: 40%; }
+  .time-console { width: calc(100% - 20px) !important; padding: 12px 14px 10px !important; }
+  .year-number { font-size: 40px !important; }
+  .play-button span { font-size: 12px; }
+  .why-legend { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 168px); left: 10px; }
+  .tour-caption { top: 30%; }
+}
+
+.era-legend { position: absolute; z-index: 5; top: calc(max(22px, env(safe-area-inset-top)) + 90px); left: 24px; right: 76px; display: flex; flex-wrap: wrap; gap: 4px 9px; align-items: center; font: 10px var(--mono); color: #cfe0dc; pointer-events: none; text-shadow: 0 1px 6px rgba(0,0,0,.9); transition: opacity .3s; }
+.era-legend span { display: inline-flex; align-items: center; gap: 4px; }
+.era-legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.era-legend .era-title { width: 100%; color: #9fb4b2; }
+.era-legend .era-pred { display: none; }
+.era-legend.show-pred .era-pred { display: inline-flex; }
+.era-legend.is-hidden, .era-legend.is-flat, .world.is-comparing .era-legend { opacity: 0; }
+@media (max-width: 600px) { .era-legend { left: 14px; right: 64px; top: calc(max(22px, env(safe-area-inset-top)) + 86px); } }

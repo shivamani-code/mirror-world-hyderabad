@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#071116">
+  <meta name="description" content="Fly through 3D Hyderabad and watch it grow in real Landsat satellite photos from 1990 to 2026, then a 2040 growth prediction.">
+  <meta property="og:title" content="Mirror World: Hyderabad">
+  <meta property="og:description" content="Real satellite photos 1990 → 2026, a 3D city fly-through, and where Hyderabad may grow by 2040.">
+  <title>Mirror World: Hyderabad</title>
+  <link rel="preconnect" href="https://server.arcgisonline.com">
+  <link rel="preconnect" href="https://tiles.openfreemap.org">
+  <link rel="preconnect" href="https://mirror-hyderabad-sat1.sites.tab.bot">
+  <link rel="preconnect" href="https://mirror-hyderabad-sat2.sites.tab.bot">
+  <link href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3b">
+  <link rel="stylesheet" href="legend.css?v=3b">
+  <link rel="stylesheet" href="v2.css?v=3b">
+  <link rel="stylesheet" href="v3.css?v=3b">
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+  <script src="citystyle.js?v=3b" defer></script>
+  <script src="city3d.js?v=3b" defer></script>
+  <script src="tour.js?v=3b" defer></script>
+  <script src="app.js?v=3b" defer></script>
+</head>
+<body>
+  <main class="world intro-active" id="world">
+    <div class="map-stage" id="mapStage" aria-label="Interactive 3D map of Hyderabad">
+      <div id="map" class="map-canvas" role="application" aria-label="Hyderabad map"></div>
+      <div id="compareMap" class="map-canvas compare-map" aria-label="Comparison map"></div>
+      <div class="map-wash" aria-hidden="true"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="identity" href="#" aria-label="Mirror World Hyderabad home">
+        <span class="identity-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="identity-copy"><strong>Mirror World <em class="v2tag">v3</em></strong><small>Hyderabad · real satellite time machine</small></span>
+      </a>
+      <div class="header-actions">
+        <button class="icon-button compare-toggle" id="compareToggle" type="button" aria-pressed="false" aria-label="Before and after swipe" title="Before / after">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v16H4zM13 4h7v16h-7zM12 2v20"/></svg><span>Compare</span>
+        </button>
+        <button class="icon-button" id="shareButton" type="button" aria-label="Share this view" title="Share view">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/></svg><span>Share</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="chip-row"><span class="photo-chip" id="photoChip">Landsat 9 · 20 Feb 2026 · 30 m</span></div>
+    <div class="era-legend" id="eraLegend" aria-label="3D bar colours"><span class="era-title">3D bars: built-up share · first built</span><span><i style="background:#3fdcff"></i>&lt;1990</span><span><i style="background:#3ff0b0"></i>90s</span><span><i style="background:#ffd23f"></i>00s</span><span><i style="background:#ff9a3f"></i>10s</span><span><i style="background:#ff5fd2"></i>20s</span><span class="era-pred"><i style="background:#ff5a86"></i>2040?</span></div>
+    <div class="tour-caption" id="tourCaption" aria-live="polite"></div>
+
+    <aside class="map-tools" aria-label="Map controls">
+      <button class="map-tool" id="tiltToggle" type="button" aria-label="Toggle 3D tilt" title="3D / 2D"><b>3D</b></button>
+      <button class="map-tool" id="compassButton" type="button" aria-label="Point north" title="North up">
+        <svg viewBox="0 0 24 24" aria-hidden="true" id="compassIcon"><path d="M12 3l4 9h-8z" fill="currentColor" stroke="none" opacity=".9"/><path d="M12 21l-4-9h8z"/></svg>
+      </button>
+      <button class="map-tool" id="resetView" type="button" aria-label="Reset map view" title="Reset view">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/><circle cx="12" cy="12" r="5"/></svg>
+      </button>
+      <button class="map-tool" id="attributionToggle" type="button" aria-expanded="false" aria-controls="attributionPanel" aria-label="About the data" title="About the data">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg>
+      </button>
+    </aside>
+
+    <section class="attribution-panel" id="attributionPanel" aria-label="Data and map credits" hidden>
+      <button class="panel-close" id="closeAttribution" type="button" aria-label="Close credits">×</button>
+      <h2>What you're looking at</h2>
+      <p><b>1990–2026 photos are real.</b> Full Landsat true-colour scenes covering all of greater Hyderabad (USGS/NASA, rendered by Microsoft Planetary Computer): Landsat 5 · 9 Feb 1990, Landsat 7 · 29 Feb 2000, Landsat 5 · 31 Jan 2010, Landsat 8 · 27 Jan 2020, Landsat 9 · 20 Feb 2026. Each pixel is 30 m, so you see the city spreading, lakes and roads, not single houses. Between photo years the slider cross-fades two photos.</p>
+      <p><b>3D bars (zoomed out)</b> cover the whole city: one bar per ~0.5 km cell, height = share of the cell that is built up in the slider year (GHSL, EU JRC; exaggerated), colour = decade it first became built up.</p><p><b>3D city (v3, zoom in past the bars)</b>: about 934,000 real building footprints across the core city (HITEC City, Gachibowli, Financial District, Banjara/Jubilee Hills, old city, Hussain Sagar, Secunderabad) from GlobalBuildingAtlas (TU Munich; Google + OSM footprints). Heights: OpenStreetMap height tags where mapped (~1,300 buildings), otherwise the building's tallest point in Google Open Buildings 2.5D Temporal (2023, ~835,000 buildings), otherwise GlobalBuildingAtlas's estimate. Satellite-derived heights are estimates: expect a few metres of error, and the newest towers (after mid-2023) may be missing or short. When a building appears on the slider comes from Google's 2016/2019/2023 layers and, before 2016, from its neighbourhood's GHSL growth curve, not its true construction date. Windows, colours, rooftop tanks and lit windows are drawn by the app, not photographed. Charminar and the Buddha statue are hand-built models; the Metro viaduct is drawn from the Metro line.</p>
+      <p><b>Zoomed in at 2020+</b> the detailed photo is today's Esri World Imagery (Maxar, Earthstar Geographics).</p>
+      <p><b>2040 is a prediction, not fact.</b> Built-up area from GHSL (EU JRC); growth placed by distance to Metro (incl. announced Phase 2), ORR, RRR, airport and Future City. Phase 2 lines and the RRR south section are approximate.</p>
+      <small>© OpenStreetMap contributors · OpenFreeMap / OpenMapTiles · Esri · USGS/NASA Landsat · GHSL © European Union · Google Open Buildings 2.5D Temporal (CC BY 4.0) · GlobalBuildingAtlas, Zhu et al. 2025 (TUM)</small>
+    </section>
+
+    <div class="compare-label compare-label-left" id="leftYearLabel" role="button" tabindex="0" aria-label="Change the left year">1990 · THEN ⇄</div>
+    <div class="compare-label compare-label-right" id="rightYearLabel" aria-hidden="true">2026 · NOW</div>
+    <div class="compare-divider" id="compareDivider" role="slider" tabindex="0" aria-label="Comparison divider" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" hidden>
+      <span class="divider-grip"><i></i><i></i></span>
+    </div>
+
+    <section class="why-legend is-collapsed" id="whyLegend" hidden aria-label="Why the 2040 prediction looks like this">
+      <h3 id="whyToggle" role="button" tabindex="0">Why here? · 2040 model</h3>
+      <div class="why-ramp" aria-hidden="true"></div>
+      <ul class="why-factors">
+        <li><span class="why-dot" style="background:#7fe9ff"></span><span>GHSL growth trend at the city edge</span><span class="why-w">35%</span></li>
+        <li><span class="why-dot" style="background:#ff4d6d"></span><span>Metro, existing + Phase 2</span><span class="why-w">20%</span></li>
+        <li><span class="why-dot" style="background:#3ff0d8"></span><span>Outer Ring Road (ORR)</span><span class="why-w">15%</span></li>
+        <li><span class="why-dot" style="background:#ffffff"></span><span>Regional Ring Road (RRR)</span><span class="why-w">10%</span></li>
+        <li><span class="why-dot" style="background:#ffb020"></span><span>RGIA airport</span><span class="why-w">10%</span></li>
+        <li><span class="why-dot" style="background:#c084fc"></span><span>Future City / Pharma City</span><span class="why-w">10%</span></li>
+      </ul>
+      <span class="why-note" id="whyNote">How much: the 2000–2020 pace continued (≈7 km² of new city a year, GHSL). Where: each factor places its share on open land closest to it and to existing towns; lakes, forests and the airport are excluded. Prediction, not fact.</span>
+    </section>
+
+    <div class="gesture-hint" id="gestureHint" hidden>Pinch to zoom · twist to rotate · two-finger drag up/down to tilt</div>
+
+    <section class="time-console" aria-label="Time controls">
+      <div class="console-topline">
+        <div class="year-readout" aria-live="polite">
+          <span class="year-kicker" id="yearKicker">REAL SATELLITE PHOTO</span>
+          <div class="year-line"><span class="year-number" id="yearNumber">2026</span><span class="prediction-badge" id="predictionBadge" hidden>PREDICTION <span>— not fact</span></span></div>
+        </div>
+        <div class="area-stat" aria-live="polite"><span class="stat-dot"></span><span class="stat-label">Built-up (GHSL)</span><strong id="areaValue">—</strong><small>km²</small></div>
+      </div>
+      <div class="slider-row">
+        <span class="range-edge">1990</span>
+        <div class="slider-wrap">
+          <input id="yearSlider" type="range" min="1990" max="2040" step="1" value="2026" aria-label="Select a year from 1990 to 2040">
+          <div class="ticks" id="ticks" aria-hidden="true"></div>
+        </div>
+        <span class="range-edge">2040</span>
+      </div>
+      <div class="console-bottomline">
+        <span class="timeline-caption"><span class="timeline-dot"></span><span id="timelineStatus">Landsat photo</span></span>
+        <button class="play-button" id="playButton" type="button" aria-label="Play the fly-through">
+          <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg>
+          <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm7 0h4v14h-4z"/></svg>
+          <span id="playLabel">Play fly-through</span>
+        </button>
+      </div>
+    </section>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="intro-skip" id="introSkip" aria-hidden="true">Tap anywhere to take control <span>✦</span></div>
+  </main>
+</body>
+</html>
